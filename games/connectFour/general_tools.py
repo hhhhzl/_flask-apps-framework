@@ -10,13 +10,17 @@ class GeneralRubric:
     def __init__(self):
         self.whichPlayer = None
 
-    def is_terminate(self, board, number_to_win, player1Steps=None, player2Steps=None):
-        if player2Steps is None or player2Steps is None:
-            self.check_which_player(board)
-        elif player2Steps is not None and player2Steps is not None:
-            self.check_which_player(board, player1Steps, player2Steps)
+    def is_terminate(self, board, number_to_win, player=None, player1Steps=None, player2Steps=None):
+        if player is None:
+            # need to check
+            if player2Steps is None or player2Steps is None:
+                self.check_which_player(board)
+            elif player2Steps is not None and player2Steps is not None:
+                self.check_which_player(board, player1Steps, player2Steps)
 
-        if self.is_horizontal_win(board, number_to_win) or self.is_vertical_win(board, number_to_win) or self.is_upDiagonal_win(board, number_to_win) or self.is_downDiagonal_win(board, number_to_win):
+        if self.is_horizontal_win(board, number_to_win, player) or self.is_vertical_win(board, number_to_win,
+                                                                                        player) or self.is_upDiagonal_win(
+                board, number_to_win, player) or self.is_downDiagonal_win(board, number_to_win, player):
             return self.gameState["FIND_WINNER"]
         else:
             if self.is_board_full(board):
@@ -42,8 +46,7 @@ class GeneralRubric:
         pass
 
     def make_move(self, board, column):
-        if self.whichPlayer is None:
-            self.check_which_player(board)
+        self.check_which_player(board)
 
         if self.check_col_valid(board, column):
             rows = board.shape[0]
@@ -51,7 +54,6 @@ class GeneralRubric:
             while board[rows - iteration][column] != 0:
                 iteration += 1
             board[rows - iteration][column] = self.player[self.whichPlayer]
-
 
     def redo_last_step(self):
         pass
@@ -80,39 +82,53 @@ class GeneralRubric:
             elif first_player_count == second_player_count:
                 self.whichPlayer = 1
 
-    def is_horizontal_win(self, board, number_to_win):
-        if self.whichPlayer is None:
-            self.check_which_player(board)
+    def is_horizontal_win(self, board, number_to_win, player_to_check=None):
+        if player_to_check is None:
+            # check current
+            if self.whichPlayer is None:
+                self.check_which_player(board)
         rows = board.shape[0]
         column = board.shape[1]
         for i in range(rows):
-            for j in range(column-number_to_win):
+            for j in range(column - number_to_win):
                 total_sum = 0
-                if board[rows-1-i][j] != 0:
+                if board[rows - 1 - i][j] != 0:
                     for item in range(number_to_win):
                         total_sum += board[rows - 1 - i][j + item]
-                    if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
-                        return True
+                    if player_to_check is None:
+                        if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
+                            return True
+                    else:
+                        if total_sum == number_to_win * self.player[player_to_check]:
+                            return True
         return False
 
-    def is_vertical_win(self, board, number_to_win):
-        if self.whichPlayer is None:
-            self.check_which_player(board)
+    def is_vertical_win(self, board, number_to_win, player_to_check=None):
+        if player_to_check is None:
+            # check current
+            if self.whichPlayer is None:
+                self.check_which_player(board)
+
         rows = board.shape[0]
         column = board.shape[1]
-        for i in range(rows-number_to_win+1):
+        for i in range(rows - number_to_win + 1):
             for j in range(column):
                 total_sum = 0
                 if board[rows - 1 - i][j] != 0:
                     for item in range(number_to_win):
                         total_sum += board[rows - 1 - i - item][j]
-                    if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
-                        return True
+                    if player_to_check is None:
+                        if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
+                            return True
+                    else:
+                        if total_sum == number_to_win * self.player[player_to_check]:
+                            return True
         return False
 
-    def is_downDiagonal_win(self, board, number_to_win):
-        if self.whichPlayer is None:
-            self.check_which_player(board)
+    def is_downDiagonal_win(self, board, number_to_win, player_to_check= None):
+        if player_to_check is None:
+            if self.whichPlayer is None:
+                self.check_which_player(board)
         rows = board.shape[0]
         column = board.shape[1]
         for i in range(rows - number_to_win + 1):
@@ -121,13 +137,18 @@ class GeneralRubric:
                 if board[i][j] != 0:
                     for item in range(number_to_win):
                         total_sum += board[i + item][j + item]
-                    if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
-                        return True
+                    if player_to_check is None:
+                        if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
+                            return True
+                    else:
+                        if total_sum == number_to_win * self.player[player_to_check]:
+                            return True
         return False
 
-    def is_upDiagonal_win(self, board, number_to_win):
-        if self.whichPlayer is None:
-            self.check_which_player(board)
+    def is_upDiagonal_win(self, board, number_to_win, player_to_check= None):
+        if player_to_check is None:
+            if self.whichPlayer is None:
+                self.check_which_player(board)
         rows = board.shape[0]
         column = board.shape[1]
         for i in range(rows - number_to_win):
@@ -136,8 +157,12 @@ class GeneralRubric:
                 if board[rows - 1 - i][j] != 0:
                     for item in range(number_to_win):
                         total_sum += board[rows - 1 - i - item][j + item]
-                    if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
-                        return True
+                    if player_to_check is None:
+                        if total_sum == number_to_win * self.player[3 - self.whichPlayer]:
+                            return True
+                    else:
+                        if total_sum == number_to_win * self.player[player_to_check]:
+                            return True
         return False
 
     def is_board_full(self, board):
