@@ -18,15 +18,13 @@ logger = logging.getLogger(__file__)
 
 
 def save_as_pickle(filename, data):
-    completeName = os.path.join("../../model_data/", \
-                                filename)
+    completeName = os.path.join("../../model_data/", filename)
     with open(completeName, 'wb') as output:
         pickle.dump(data, output)
 
 
 def load_pickle(filename):
-    completeName = os.path.join("../../model_data/", \
-                                filename)
+    completeName = os.path.join("../../model_data/", filename)
     with open(completeName, 'rb') as pkl_file:
         data = pickle.load(pkl_file)
     return data
@@ -54,7 +52,7 @@ def load_state(net, optimizer, scheduler, args, iteration, new_optim_state=True)
 
 def load_results(iteration):
     """ Loads saved results if exists """
-    losses_path = "./model_data/losses_per_epoch_iter%d.pkl" % iteration
+    losses_path = "../../model_data/losses_per_epoch_iter%d.pkl" % iteration
     if os.path.isfile(losses_path):
         losses_per_epoch = load_pickle("losses_per_epoch_iter%d.pkl" % iteration)
         logger.info("Loaded results buffer")
