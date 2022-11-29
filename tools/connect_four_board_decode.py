@@ -14,5 +14,16 @@ def decode_connect_four(board_string, rows):
     return board
 
 
+def trans_connect_four(board):
+    rows = board.shape[0]
+    cols = board.shape[1]
+    for i in range(rows):
+        for j in range(cols):
+            if board[i][j] == 1:
+                board[i][j] = -1
+            elif board[i][j] == -1:
+                board[i][j] = 1
+
+
 if __name__ == "__main__":
     print(decode_connect_four("000000000000000000000000000000000000011200", 6))

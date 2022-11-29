@@ -1,6 +1,10 @@
+import numpy as np
+
 from games.connectFour.general_tools import GeneralRubric
+from tools.connect_four_board_decode import trans_connect_four
 import math
 import random
+
 
 class MaxMin(GeneralRubric):
     scoreEV = [100, 5, 2, 4]
@@ -13,9 +17,19 @@ class MaxMin(GeneralRubric):
 
     def runMinMax(self, board, depth, number_to_win=4):
         self.initial_which_player(board)
-        col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
-        self.score = minimax_score
-        self.output = col
+
+        must_win = self.must_win_move(board, number_to_win)
+        must_block = self.must_block_move(board, number_to_win)
+        if must_win is not None:
+            self.output = must_win
+        elif must_block is not None:
+            self.output = must_block
+        # else:
+        #     self.output = random.choice([0,1,2,3,4,5,6])
+        else:
+            col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
+            self.score = minimax_score
+            self.output = col
 
     def initial_which_player(self, board):
         self.check_which_player(board)
@@ -42,7 +56,7 @@ class MaxMin(GeneralRubric):
             if is_terminal:
                 if self.is_terminate(board, number_to_win, player=self.player_to_play):
                     return [None, 100000000000000]
-                elif self.is_terminate(board, number_to_win, player=3-self.player_to_play):
+                elif self.is_terminate(board, number_to_win, player=3 - self.player_to_play):
                     return [None, -10000000000000]
                 else:  # Game is over, no more valid moves
                     return None, 0
@@ -92,25 +106,25 @@ class MaxMin(GeneralRubric):
         ## Score Horizontal
         for r in range(rows):
             row_array = [int(i) for i in list(board[r, :])]
-            for c in range(columns - number_to_win - 1):
+            for c in range(columns - number_to_win + 1):
                 window = row_array[c:c + number_to_win]
                 score += self.evaluate_window(window, playerCheck)
 
         ## Score Vertical
         for c in range(columns):
             col_array = [int(i) for i in list(board[:, c])]
-            for r in range(rows - number_to_win - 1):
+            for r in range(rows - number_to_win + 1):
                 window = col_array[r:r + number_to_win]
                 score += self.evaluate_window(window, playerCheck)
 
         ## Score posiive sloped diagonal
-        for r in range(rows - number_to_win - 1):
-            for c in range(columns - number_to_win - 1):
+        for r in range(rows - number_to_win + 1):
+            for c in range(columns - number_to_win + 1):
                 window = [board[r + i][c + i] for i in range(number_to_win)]
                 score += self.evaluate_window(window, playerCheck)
 
-        for r in range(rows - number_to_win - 1):
-            for c in range(columns - number_to_win - 1):
+        for r in range(rows - number_to_win + 1):
+            for c in range(columns - number_to_win + 1):
                 window = [board[r + 3 - i][c + i] for i in range(number_to_win)]
                 score += self.evaluate_window(window, playerCheck)
 
@@ -131,4 +145,33 @@ class MaxMin(GeneralRubric):
 
         return score
 
+    def must_win_move(self, board, number_to_win):
+        valid_positions = self.check_valid_position(board)
+        col = None
+        for each_position in valid_positions:
+            b_copy = board.copy()
+            self.make_move(b_copy, each_position)
+            gameState = self.is_terminate(b_copy, number_to_win, self.player_to_play)
+            if gameState == 1:
+                col = each_position
+                break
+        return col
 
+    def must_block_move(self, board, number_to_win):
+        valid_positions = self.check_valid_position(board)
+        col = None
+        for each_position in valid_positions:
+            b_copy = board.copy()
+            trans_connect_four(b_copy)
+            self.make_move(b_copy, each_position)
+            gameState = self.is_terminate(b_copy, number_to_win, self.player_to_play)
+            if gameState == 1:
+                col = each_position
+                break
+        return col
+
+
+if __name__ == "__main__":
+    board = np.zeros((6, 7), dtype=int)
+    board[3][2] = 1
+    game = MaxMin()

@@ -2,6 +2,7 @@ import numpy as np
 import logging
 from general_tools import GeneralRubric
 from strategy.maxmin_alpha_pruning_connect4 import MaxMin
+import math
 
 
 class gameEngine(GeneralRubric):
@@ -53,6 +54,9 @@ class gameEngine(GeneralRubric):
                         player1.runMinMax(self.board, d1, self.number_to_win)
                         number = player1.output
                         self.make_move(self.board, number)
+                        # col, minimax_score = minimax(self.board, 8, -math.inf, math.inf, True)
+                        # print(col)
+                        # self.make_move(self.board, col)
 
                 print(self.draw_aboard())
                 self.player1Steps += 1
@@ -154,5 +158,5 @@ if __name__ == "__main__":
     # result.append(winner2)
     # print(result)
     game = gameEngine()
-    game.start_game(5, 8)
+    game.start_game(8, 5)
 

@@ -19,3 +19,6 @@ vscode
 .log
 logs
 log
+
+datasets
+evaluator_data

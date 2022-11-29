@@ -90,7 +90,7 @@ class GeneralRubric:
         rows = board.shape[0]
         column = board.shape[1]
         for i in range(rows):
-            for j in range(column - number_to_win):
+            for j in range(column - number_to_win + 1):
                 total_sum = 0
                 if board[rows - 1 - i][j] != 0:
                     for item in range(number_to_win):
@@ -162,6 +162,7 @@ class GeneralRubric:
                             return True
                     else:
                         if total_sum == number_to_win * self.player[player_to_check]:
+
                             return True
         return False
 
