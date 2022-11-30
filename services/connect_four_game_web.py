@@ -13,7 +13,7 @@ logger = get_general_logger(name='Connect_four', path=abspath('logs'))
 
 def main():
     app = connect_four_system.create_app()
-    app.run(debug=True, port=PORT)
+    # app.run(debug=True, port=PORT)
     http_server = WSGIServer((HOST, PORT), app)
     logger.info('Connect_four Web Started.')
     logger.info(f'Host: {HOST} Port: {PORT} URL: http://{HOST}:{PORT}')
