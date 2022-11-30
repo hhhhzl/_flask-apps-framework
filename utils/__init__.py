@@ -4,7 +4,7 @@ import datetime
 from pprint import pprint
 
 USERNAME = getpass.getuser()
-ENV_PATH = "~/miniconda3/envs/finance_data/bin"
+ENV_PATH = "/root/anaconda3/envs/pytorch/bin"
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
