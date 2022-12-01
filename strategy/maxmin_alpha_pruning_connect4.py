@@ -84,7 +84,7 @@ class MaxMin(GeneralRubric):
         self.score = None
         self.output = None
 
-    def runMinMax(self, board, depth, iteration=None, play_route=None, number_to_win=4, http=False):
+    def runMinMax(self, board, depth, iteration=10000, play_route=None, number_to_win=4, http=False):
         self.initial_which_player(board)
         # if http:
         #     iteration, play_route = check_table_input(board, self.player_to_play)

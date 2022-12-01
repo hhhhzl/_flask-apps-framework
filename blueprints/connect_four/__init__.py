@@ -33,6 +33,7 @@ def get_solution():
             game = MaxMin()
             game.runMinMax(game_board, 8, number_to_win=number_to_win, http=True)
             data = game.output + 1
+            print(data)
             return SuccessDataResponse(data)
     except:
         return ArgumentExceptionResponse()
