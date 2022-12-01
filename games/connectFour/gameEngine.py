@@ -9,7 +9,7 @@ import time
 class gameEngine(GeneralRubric):
     PLAYER_TYPE = {"human": True, "robot": False}
 
-    def __init__(self, rows=6, columns=7, number_to_win=4, player1="robot", player2="robot", player1S="max_min",
+    def __init__(self, rows=6, columns=7, number_to_win=4, player1="human", player2="robot", player1S="max_min",
                  player2S="max_min"):
         super().__init__()
         self.rows = rows
@@ -166,6 +166,6 @@ if __name__ == "__main__":
     # print(result)
     start = time.time()
     game = gameEngine()
-    game.start_game(5, 8)
+    game.start_game(8, 8)
     print(time.time() - start)
 

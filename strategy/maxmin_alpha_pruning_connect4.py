@@ -141,7 +141,7 @@ class MaxMin(GeneralRubric):
                 elif self.is_terminate(board, number_to_win, player=3 - self.player_to_play):
                     return [None, -10000000000000]
                 else:  # Game is over, no more valid moves
-                    return None, 0
+                    return None, -50
             elif depth == 0:  # Depth is zero
                 return [None, self.score_position(board, self.player_to_play, number_to_win)]
 
@@ -186,45 +186,57 @@ class MaxMin(GeneralRubric):
         center_count = center_array.count(self.player[playerCheck])
         score += center_count * 3
 
+        pre_center_array = [int(i) for i in list(board[:, columns // 2 - 1])]
+        pre_center_count = pre_center_array.count(self.player[playerCheck])
+        score += pre_center_count * 2
+
+        post_center_array = [int(i) for i in list(board[:, columns // 2 + 1])]
+        post_center_count = post_center_array.count(self.player[playerCheck])
+        score += post_center_count * 2
+
         ## Score Horizontal
         for r in range(rows):
             row_array = [int(i) for i in list(board[r, :])]
             for c in range(columns - number_to_win + 1):
                 window = row_array[c:c + number_to_win]
-                score += self.evaluate_window(window, playerCheck)
+                score += self.evaluate_window(window, playerCheck, number_to_win)
 
         ## Score Vertical
         for c in range(columns):
             col_array = [int(i) for i in list(board[:, c])]
             for r in range(rows - number_to_win + 1):
                 window = col_array[r:r + number_to_win]
-                score += self.evaluate_window(window, playerCheck)
+                score += self.evaluate_window(window, playerCheck, number_to_win)
 
         ## Score posiive sloped diagonal
         for r in range(rows - number_to_win + 1):
             for c in range(columns - number_to_win + 1):
                 window = [board[r + i][c + i] for i in range(number_to_win)]
-                score += self.evaluate_window(window, playerCheck)
+                score += self.evaluate_window(window, playerCheck, number_to_win)
 
         for r in range(rows - number_to_win + 1):
             for c in range(columns - number_to_win + 1):
                 window = [board[r + 3 - i][c + i] for i in range(number_to_win)]
-                score += self.evaluate_window(window, playerCheck)
+                score += self.evaluate_window(window, playerCheck, number_to_win)
 
         return score
 
-    def evaluate_window(self, window, playerCheck):
+    def evaluate_window(self, window, playerCheck, number):
         score = 0
 
-        if window.count(self.player[playerCheck]) == 4:
+        if window.count(self.player[playerCheck]) == number:
             score += self.scoreEV[0]
-        elif window.count(self.player[playerCheck]) == 3 and window.count(0) == 1:
+        elif window.count(self.player[playerCheck]) == number-1 and window.count(0) == 1:
             score += self.scoreEV[1]
-        elif window.count(self.player[playerCheck]) == 2 and window.count(0) == 2:
+        elif window.count(self.player[playerCheck]) == number-2 and window.count(0) == 2:
             score += self.scoreEV[2]
 
-        if window.count(self.player[playerCheck]) == 3 and window.count(0) == 1:
+        if window.count(self.player[3 - playerCheck]) == 4:
+            score -= self.scoreEV[0]
+        elif window.count(self.player[3 - playerCheck]) == number-1 and window.count(0) == 1:
             score -= self.scoreEV[3]
+        elif window.count(self.player[3 - playerCheck]) == number-2 and window.count(0) == 2:
+            score -= self.scoreEV[2]
 
         return score
 
