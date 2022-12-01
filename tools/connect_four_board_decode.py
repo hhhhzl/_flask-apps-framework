@@ -1,15 +1,17 @@
 import numpy as np
 
 
-def decode_connect_four(board_string, rows):
-    column = int(len(board_string) / rows)
+def decode_connect_four(board_string):
+    rows = int(board_string[0])
+    string = board_string[1:]
+    column = int(len(string) / rows)
     board = np.zeros((rows, column), dtype=int)
-    for i in range(len(board_string)):
+    for i in range(len(string)):
         row = i // column
         col = i % column
-        if board_string[i] == '1':
+        if string[i] == '1':
             board[row][col] = 1
-        elif board_string[i] == '2':
+        elif string[i] == '2':
             board[row][col] = -1
     return board
 

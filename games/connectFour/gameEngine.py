@@ -3,6 +3,7 @@ import logging
 from general_tools import GeneralRubric
 from strategy.maxmin_alpha_pruning_connect4 import MaxMin
 import math
+import time
 
 
 class gameEngine(GeneralRubric):
@@ -20,6 +21,7 @@ class gameEngine(GeneralRubric):
         self.player1Steps = 0
         self.player2Steps = 0
         self.winner = None
+        self.player_move = ''
 
         if self.player1:
             self.player1Strategy = None
@@ -48,11 +50,14 @@ class gameEngine(GeneralRubric):
                         number = int(input("inValid column, please reenter: ")) - 1
 
                     self.make_move(self.board, number)
+                    self.player_move += str(number)
                 else:
                     if self.player1Strategy == "max_min":
+                        print(f"AI is thinking........")
                         player1 = MaxMin()
-                        player1.runMinMax(self.board, d1, self.number_to_win)
+                        player1.runMinMax(self.board, d1, self.player1Steps + self.player2Steps, self.player_move, self.number_to_win)
                         number = player1.output
+                        self.player_move += str(number)
                         self.make_move(self.board, number)
                         # col, minimax_score = minimax(self.board, 8, -math.inf, math.inf, True)
                         # print(col)
@@ -69,14 +74,16 @@ class gameEngine(GeneralRubric):
                         number = int(input("inValid column, please reenter: ")) - 1
 
                     self.make_move(self.board, number)
+                    self.player_move += str(number)
 
                 else:
 
                     if self.player2Strategy == "max_min":
                         print(f"AI is thinking........")
                         player2 = MaxMin()
-                        player2.runMinMax(self.board, d2, self.number_to_win)
+                        player2.runMinMax(self.board, d2, self.player1Steps + self.player2Steps, self.player_move, self.number_to_win)
                         number = player2.output
+                        self.player_move += str(number)
                         self.make_move(self.board, number)
 
                 print(self.draw_aboard())
@@ -157,6 +164,8 @@ if __name__ == "__main__":
     # result.append(tie)
     # result.append(winner2)
     # print(result)
+    start = time.time()
     game = gameEngine()
-    game.start_game(8, 10)
+    game.start_game(5, 8)
+    print(time.time() - start)
 

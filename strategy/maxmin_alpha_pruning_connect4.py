@@ -1,9 +1,78 @@
 import numpy as np
-
+import os
 from games.connectFour.general_tools import GeneralRubric
 from tools.connect_four_board_decode import trans_connect_four
 import math
 import random
+
+
+def player_table_search(player, route):
+    number_return = None
+    s_compare = ''
+    for i in range(len(route)):
+        s_compare += str(int(route[i]) + 1)
+    number_compare = len(route)
+    if player == 1:
+        # filename = os.path.abspath(os.path.join(os.path.dirname(__file__), 'depth_8_back.txt'))
+        # with open(filename, 'r') as file:
+        #     temp = file.read().splitlines()
+        #     for line in temp:
+        #         if line[:number_compare] == s_compare:
+        #             number_return = int(line[number_compare]) - 1
+        #             break
+        # file.close()
+        return number_return
+    elif player == 2:
+        filename = os.path.abspath(os.path.join(os.path.dirname(__file__), 'depth_8_back.txt'))
+        with open(filename, 'r') as file:
+            temp = file.read().splitlines()
+            for line in temp:
+                if line[:number_compare] == s_compare:
+                    number_return = int(line[number_compare]) - 1
+                    break
+        file.close()
+        return number_return
+
+
+def check_table_input(board, player):
+    rows = board.shape[0]
+    column = board.shape[1]
+    new_board = np.zeros((rows, column), dtype=int)
+    filename = os.path.abspath(os.path.join(os.path.dirname(__file__), 'gamePlayRecord.txt'))
+    with open(filename, 'a+') as file:
+            temp = file.read().splitlines()
+            if temp:
+                for i in temp[-1]:
+                    GeneralRubric().make_move(new_board, int(i))
+            wrong_spot = 0
+            empty = 0
+            for row in range(rows):
+                for col in range(column):
+                    if board[row][col] != new_board[row][col]:
+                        wrong_spot += 1
+                        opp_row = col
+                    if board[row][col] != 0:
+                        empty += 1
+            if empty == 0:
+                file.write("\n")
+                file.close()
+                return empty, ''
+            elif empty == 1 and wrong_spot == 1:
+                last_line = str(opp_row)
+                file.write(str(opp_row))
+                return empty, last_line
+            elif wrong_spot == 1 and empty > 1:
+                last_line = temp[-1] + str(opp_row)
+                file.write(str(opp_row))
+                file.close()
+                return empty, last_line
+            elif wrong_spot > 1 or wrong_spot < 1:
+                file.close()
+                return 10000, None
+            else:
+                file.write("")
+                file.close()
+                return 0, ''
 
 
 class MaxMin(GeneralRubric):
@@ -15,21 +84,34 @@ class MaxMin(GeneralRubric):
         self.score = None
         self.output = None
 
-    def runMinMax(self, board, depth, number_to_win=4):
+    def runMinMax(self, board, depth, iteration=None, play_route=None, number_to_win=4, http=False):
         self.initial_which_player(board)
-
+        # if http:
+        #     iteration, play_route = check_table_input(board, self.player_to_play)
         must_win = self.must_win_move(board, number_to_win)
         must_block = self.must_block_move(board, number_to_win)
         if must_win is not None:
             self.output = must_win
         elif must_block is not None:
             self.output = must_block
-        # else:
-        #     self.output = random.choice([0,1,2,3,4,5,6])
         else:
-            col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
-            self.score = minimax_score
-            self.output = col
+            if iteration == 0:
+                self.output = 3
+            elif iteration < 6:
+                self.output = player_table_search(self.player_to_play, play_route)
+                if self.output is None:
+                    col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
+                    self.score = minimax_score
+                    self.output = col
+            else:
+                col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
+                self.score = minimax_score
+                self.output = col
+        # if http:
+        #     filename = os.path.abspath(os.path.join(os.path.dirname(__file__), 'gamePlayRecord.txt'))
+        #     with open(filename, 'a+') as file:
+        #         print(self.output)
+        #         file.write(str(self.output))
 
     def initial_which_player(self, board):
         self.check_which_player(board)
@@ -73,6 +155,7 @@ class MaxMin(GeneralRubric):
                 if new_score > value:
                     value = new_score
                     column = col
+
                 alpha = max(alpha, value)
                 if alpha >= beta:
                     break

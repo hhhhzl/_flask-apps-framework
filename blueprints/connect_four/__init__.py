@@ -17,11 +17,11 @@ bp = Blueprint('connect_four', __name__, url_prefix='/api/connect_four')
 
 @bp.route('solution', methods=['GET', 'POST'])
 def get_solution():
+
     try:
         data = json.loads(request.json)
         method = data["method"]
         board = data["board"]
-        rows = data["rows"]
         number_to_win = data["connectNumber"]
 
     except:
@@ -29,9 +29,9 @@ def get_solution():
 
     try:
         if method == "maxmin":
-            game_board = decode_connect_four(board, rows)
+            game_board = decode_connect_four(board)
             game = MaxMin()
-            game.runMinMax(game_board, 8, number_to_win)
+            game.runMinMax(game_board, 8, number_to_win=number_to_win, http=True)
             data = game.output + 1
             return SuccessDataResponse(data)
     except:
