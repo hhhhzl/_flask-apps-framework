@@ -86,6 +86,7 @@ class MaxMin(GeneralRubric):
 
     def runMinMax(self, board, depth, iteration=10000, play_route=None, number_to_win=4, http=False):
         self.initial_which_player(board)
+        col = board.shape[1]
         # if http:
         #     iteration, play_route = check_table_input(board, self.player_to_play)
         must_win = self.must_win_move(board, number_to_win)
@@ -96,8 +97,8 @@ class MaxMin(GeneralRubric):
             self.output = must_block
         else:
             if iteration == 0:
-                self.output = 3
-            elif iteration < 6:
+                self.output = col//2
+            elif iteration < 0:
                 self.output = player_table_search(self.player_to_play, play_route)
                 if self.output is None:
                     col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
@@ -141,7 +142,7 @@ class MaxMin(GeneralRubric):
                 elif self.is_terminate(board, number_to_win, player=3 - self.player_to_play):
                     return [None, -10000000000000]
                 else:  # Game is over, no more valid moves
-                    return None, -50
+                    return None, -5
             elif depth == 0:  # Depth is zero
                 return [None, self.score_position(board, self.player_to_play, number_to_win)]
 

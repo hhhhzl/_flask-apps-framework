@@ -165,7 +165,7 @@ if __name__ == "__main__":
     # result.append(winner2)
     # print(result)
     start = time.time()
-    game = gameEngine()
-    game.start_game(8, 8)
+    game = gameEngine(rows=6, columns=7, number_to_win=4)
+    game.start_game(6, 6)
     print(time.time() - start)
 
