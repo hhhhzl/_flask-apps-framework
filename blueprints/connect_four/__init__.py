@@ -30,10 +30,15 @@ def get_solution():
     try:
         if method == "maxmin":
             game_board = decode_connect_four(board)
+            rows = game_board.shape[0]
+            col = game_board.shape[1]
             game = MaxMin()
-            game.runMinMax(game_board, 6, number_to_win=number_to_win, http=True)
-            data = game.output + 1
-            print(data)
+            if rows == 6 and col == 7:
+                game.runMinMax(game_board, 6, number_to_win=number_to_win, http=True)
+                data = game.output + 1
+            else:
+                game.runMinMax(game_board, 5, number_to_win=number_to_win, http=True)
+                data = game.output + 1
             return SuccessDataResponse(data)
     except:
         return ArgumentExceptionResponse()
