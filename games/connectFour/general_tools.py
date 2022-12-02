@@ -36,6 +36,19 @@ class GeneralRubric:
                 valid_locations.append(col)
         return valid_locations
 
+    def check_empty(self, board):
+        row = board.shape[0]
+        col = board.shape[1]
+        counter = 0
+        for i in range(row):
+            for j in range(col):
+                if board[i][j] != 0:
+                    counter += 1
+        if counter == 0:
+            return True
+        else:
+            return False
+
     def check_col_valid(self, board, col):
         if board[0][col] == 0:
             return True

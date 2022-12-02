@@ -104,6 +104,8 @@ class MaxMin(GeneralRubric):
                     col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
                     self.score = minimax_score
                     self.output = col
+            elif self.check_empty(board):
+                self.output = col // 2
             else:
                 col, minimax_score = self.max_min(board, depth, True, -math.inf, math.inf, number_to_win)
                 self.score = minimax_score
