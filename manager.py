@@ -5,15 +5,17 @@ import fire
 
 logger = get_general_logger(name='manager', path=abspath('logs'))
 
-class ConnectFourWeb(ServiceManager):
 
+class ConnectFourWeb(ServiceManager):
     name = 'connect_four_web'
-    file = 'connect_four_game_web.py'
+    file = 'app1_web.py'
     dir_path = abspath('services')
 
+
 SERVICES_MAP = {
-    'connect_four': ConnectFourWeb
+    'app1': ConnectFourWeb
 }
+
 
 def run_service(service_name, action):
     """
@@ -26,9 +28,10 @@ def run_service(service_name, action):
     service = SERVICES_MAP[service_name]
     service(action=action)
 
+
 def main():
     fire.Fire(run_service)
 
+
 if __name__ == '__main__':
     main()
-

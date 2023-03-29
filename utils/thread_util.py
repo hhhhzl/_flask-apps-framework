@@ -4,6 +4,7 @@ import threading
 import time
 
 
+# set up the threads tools
 class LoopThread(threading.Thread):
 
     def __init__(self, *args, **kwargs):

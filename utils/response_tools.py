@@ -1,3 +1,5 @@
+# set up the response type
+
 class BaseHttpResponse(dict):
     msg = 'default response'
     code = 10000

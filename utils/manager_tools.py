@@ -1,7 +1,8 @@
 import fire
 import time
 import os
-from utils import USERNAME, abspath, ENV_PATH
+from utils import USERNAME, abspath
+from configs.environment import ENV_PATH
 from utils.screen_tools import stop_screen, ls_screen
 from crontab import CronTab
 

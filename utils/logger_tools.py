@@ -13,9 +13,7 @@ def get_general_logger(name='unnamed', path='logs', level=logging.DEBUG):
         '%(asctime)s - %(levelname)s - %(message)s')
 
     file_name = os.path.join(path, '{}.log'.format(name))
-    file_handler = RotatingFileHandler(
-        file_name, mode='a', maxBytes=20 * 1024 * 1024,
-        backupCount=3, encoding='utf8', delay=0)
+    file_handler = RotatingFileHandler(file_name, mode='a', maxBytes=20 * 1024 * 1024,backupCount=3, encoding='utf8', delay=0)
     file_handler.setFormatter(log_formatter)
     file_handler.setLevel(logging.INFO)
 
