@@ -1,28 +1,31 @@
-## Introduction
-#### This repo is for game web app, now it only contains the connect four game, but feel free to add more games
-apps - web app, 
+# flask-apps-framework
+Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications. It began as a simple wrapper around Werkzeug and Jinja and has become one of the most popular Python web application frameworks.
+
+This repository contains the source framework for a multiple apps based on flask with databases setted up (postgre + redis) as default. The repo can also can serve as mircoserver for one of the applications. With sreen and fire tools, the framework is easy to deploy and start.
+
+The framework is the example of 2 apps but feel free to add more apps, and change database whatever you want. Have fun! 
+
+```
 blueprints - flask bp & response logic
 configs - config files
-game - enviroment for different games
-model_data - file to store game data
 services - main services
-strategy - strategy file for games
 tests - test tools
 tools - tool functions
 utils - util tool, (utilize tools)
 manager.py main process
+```
 
 MVC - model, view, controller
 
 ## Start
-1. need a server
+1. need a server, with database setted up
 
 2. build a new conda eniroment(optional)
 ```
-conda create --name game_engine python==3.9
+conda create --name flask-apps python==3.9
 ```
 
-3. change the env path to local conda env in util __init__.py
+3. change the env path to local conda env in config.environment.py file
 ```
 ENV_PATH = ''
 ```
@@ -34,18 +37,22 @@ pip setup.py develop
 
 5. config files
 ```
-connect_four_web_config.py 
+config
 ```
 
 6. start/ stop/ restart web server
 ```
-manager connect_four start
-manager connect_four stop
-manager connect_four restart
+manager app1 start
+manager app1 stop
+manager app1 restart
 ```
 
 view：
-crontab -l
+```
 screen -ls
+```
 
+Links
+-----
 
+-   Documentation: https://flask.palletsprojects.com/
