@@ -15,7 +15,7 @@ manager.py main process
 MVC - model, view, controller
 
 ## Start
-1. need a server, GPU is perfered
+1. need a server
 
 2. build a new conda eniroment(optional)
 ```
