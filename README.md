@@ -25,10 +25,13 @@ utils // util tool, (utilize tools)
 manager.py main process
 ```
 
-MVC 
-- model
-- view
-- controller
+## What included?
+- MVC ( model, view, controller )
+- database ( postgre, redis )
+- 2 apps ( app1, app2 )
+- log
+- screen
+- util ( database utils )
 
 ## Start
 1. need a server, with database set up

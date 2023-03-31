@@ -11,6 +11,7 @@ import json
 logger = get_general_logger(name='general', path=abspath('blueprints', 'app2', 'logs'))
 bp = Blueprint('app2', __name__, url_prefix='/api/app2')
 
+
 # functions for render responses for app2
 @bp.route('', methods=['GET', 'POST'])
 def render_response_app2():
