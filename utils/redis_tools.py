@@ -7,7 +7,7 @@ from configs.redis_config import REDIS_SETTINGS
 
 class RedisWrapper(object):
 
-    def __init__(self, setting_name='local'):
+    def __init__(self, setting_name='app1'):
 
         DEFAULT_SETTING = REDIS_SETTINGS[setting_name]
 
