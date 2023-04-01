@@ -6,14 +6,20 @@ import fire
 logger = get_general_logger(name='manager', path=abspath('logs'))
 
 
-class ConnectFourWeb(ServiceManager):
-    name = 'connect_four_web'
+class App1Web(ServiceManager):
+    name = 'app1_web'
+    file = 'app1_web.py'
+    dir_path = abspath('services')
+
+class App2Web(ServiceManager):
+    name = 'app1_web'
     file = 'app1_web.py'
     dir_path = abspath('services')
 
 
 SERVICES_MAP = {
-    'app1': ConnectFourWeb
+    'app1': App1Web,
+    'app2': App2Web
 }
 
 
